@@ -24,34 +24,36 @@ function calcularResultado() {
 
     try {
         let operador = "";
+        let posicion = -1;
 
-        if (expresion.includes("+")) operador = "+";
-        else if (expresion.includes("-")) operador = "-";
-        else if (expresion.includes("*")) operador = "*";
-        else if (expresion.includes("/")) operador = "/";
+        // Buscar operador (de derecha a izquierda para evitar confusión con signos negativos)
+        for (let i = expresion.length - 1; i > 0; i--) {
+            if (['+', '-', '*', '/'].includes(expresion[i])) {
+                operador = expresion[i];
+                posicion = i;
+                break;
+            }
+        }
 
-        if (operador === "") {
-            alert("Ingrese una operación válida.");
+        if (operador === "" || posicion === -1) {
+            mostrarError("Ingrese una operación válida.");
             return;
         }
 
-        const partes = expresion.split(operador);
+        const numero1Str = expresion.substring(0, posicion).trim();
+        const numero2Str = expresion.substring(posicion + 1).trim();
 
-        if (partes.length !== 2) {
-            alert("Ingrese una operación válida.");
-            return;
-        }
-
-        const n1 = parseFloat(partes[0]);
-        const n2 = parseFloat(partes[1]);
+        const n1 = parseFloat(numero1Str);
+        const n2 = parseFloat(numero2Str);
 
         if (isNaN(n1) || isNaN(n2)) {
-            alert("Ingrese números válidos.");
+            mostrarError("Ingrese números válidos.");
             return;
         }
 
+        // Validación: división entre cero
         if (operador === "/" && n2 === 0) {
-            alert("Error: no se puede dividir entre cero.");
+            mostrarError("❌ Error: No se puede dividir entre cero.");
             return;
         }
 
@@ -77,23 +79,41 @@ function calcularResultado() {
                 break;
         }
 
+        // Mostrar resultado con color
         resultadoDiv.className = `resultado-box mt-3 ${claseColor}`;
-        resultadoDiv.textContent = `Resultado final x1.5: ${resultado}`;
+        resultadoDiv.textContent = `Resultado (×1.5): ${resultado.toFixed(2)}`;
 
-        const textoHistorial = `${n1} ${operador} ${n2} = ${resultado}`;
-        historialOperaciones.push(textoHistorial);
+        // Guardar en historial
+        const operacionTexto = `${n1} ${operador} ${n2} = ${resultado.toFixed(2)}`;
+        historialOperaciones.push(operacionTexto);
 
-        const lista = document.getElementById("listaHistorial");
-        if (lista) {
-            lista.innerHTML = "";
-            historialOperaciones.forEach(op => {
-                const li = document.createElement("li");
-                li.className = "list-group-item";
-                li.textContent = op;
-                lista.appendChild(li);
-            });
-        }
-    } catch {
-        alert("Ocurrió un error al calcular.");
+        // Guardar en localStorage para persistencia
+        localStorage.setItem("historialOperaciones", JSON.stringify(historialOperaciones));
+
+        // Limpiar display después de 2 segundos
+        setTimeout(() => {
+            display.value = resultado.toFixed(2);
+        }, 500);
+
+    } catch (error) {
+        mostrarError("❌ Ocurrió un error al calcular: " + error.message);
     }
-} 
+}
+
+function mostrarError(mensaje) {
+    const resultadoDiv = document.getElementById("resultadoColor");
+    if (resultadoDiv) {
+        resultadoDiv.className = "resultado-box mt-3";
+        resultadoDiv.textContent = mensaje;
+        resultadoDiv.style.color = "#dc3545";
+    }
+    alert(mensaje);
+}
+
+// Cargar historial del localStorage al iniciar
+document.addEventListener("DOMContentLoaded", function() {
+    const historialGuardado = localStorage.getItem("historialOperaciones");
+    if (historialGuardado) {
+        historialOperaciones = JSON.parse(historialGuardado);
+    }
+});

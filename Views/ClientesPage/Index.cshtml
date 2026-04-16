@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Clientes";
+    ViewData["Title"] = "Gestión de Clientes";
 }
 
 <section class="py-5">
     <div class="container">
         <div class="card custom-card p-4">
-            <h2 class="section-title mb-4">Registrar Cliente</h2>
+            <h2 class="section-title mb-4">✏️ Registrar Cliente</h2>
 
             <div class="row g-3"> 
                 <div class="col-md-3">
@@ -23,11 +23,12 @@
             </div>
 
             <div class="mt-4">
-            <button class="btn btn-dark btn-pill px-4" onclick="guardarCliente()">
-                Guardar cliente
-            </button>
+                <button class="btn btn-dark btn-pill px-4" onclick="guardarCliente()">
+                    Guardar cliente
+                </button>
 
-            <div id="mensajeCliente" class="mt-3 fw-semibold"></div>
+                <div id="mensajeCliente" class="mt-3 fw-semibold"></div>
+            </div>
         </div>
     </div>
 </section>
@@ -35,9 +36,7 @@
 <section class="py-5 bg-soft">
     <div class="container">
         <div class="card custom-card p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                <h2 class="section-title mb-0">Clientes registrados</h2>
-            </div>
+            <h2 class="section-title mb-4">📋 Clientes Registrados</h2>
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle table-modern" id="tablaClientes">
@@ -57,61 +56,83 @@
 </section>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
         function guardarCliente() {
             const cliente = {
-                cedula: $("#txtCedula").val(),
-                nombre: $("#txtNombre").val(),
-                apellido1: $("#txtApellido1").val(),
-                apellido2: $("#txtApellido2").val()
+                cedula: document.getElementById("txtCedula").value.trim(),
+                nombre: document.getElementById("txtNombre").value.trim(),
+                apellido1: document.getElementById("txtApellido1").value.trim(),
+                apellido2: document.getElementById("txtApellido2").value.trim()
             };
 
-            $.ajax({
-                url: "/Clientes/Agregar",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(cliente),
-                success: function (response) {
-                    alert(response.mensaje);
-                    cargarClientes(); 
+            if (!cliente.cedula || !cliente.nombre || !cliente.apellido1 || !cliente.apellido2) {
+                mostrarMensaje("Complete todos los campos", "danger");
+                return;
+            }
+
+            fetch("/ClientesPage/Insertar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                error: function (err) {
-                    alert(err.responseJSON?.mensaje || "Error al guardar");
+                body: JSON.stringify(cliente)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    mostrarMensaje(data.mensaje, "success");
+                    document.getElementById("txtCedula").value = "";
+                    document.getElementById("txtNombre").value = "";
+                    document.getElementById("txtApellido1").value = "";
+                    document.getElementById("txtApellido2").value = "";
+                    cargarClientes();
+                } else {
+                    mostrarMensaje(data.mensaje, "danger");
                 }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                mostrarMensaje("Error al guardar cliente", "danger");
             });
         }
 
         function cargarClientes() {
-            $.ajax({
-                url: "/Clientes/ObtenerTodos",
-                type: "GET",
-                success: function (data) {
+            fetch("/ClientesPage/ObtenerTodos")
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector("#tablaClientes tbody");
+                tbody.innerHTML = "";
 
-                    let filas = "";
-
-                    data.forEach(c => {
-                        filas += `
-                            <tr>
-                                <td>${c.cedula}</td>
-                                <td>${c.nombre}</td>
-                                <td>${c.apellido1}</td>
-                                <td>${c.apellido2}</td>
-                            </tr>
-                        `;
-                    });
-
-                    $("#tablaClientes tbody").html(filas);
-                },
-                error: function () {
-                    alert("Error al cargar clientes");
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No hay clientes registrados</td></tr>';
+                    return;
                 }
-            });
+
+                data.forEach(c => {
+                    const fila = `
+                        <tr>
+                            <td><strong>${c.cedula}</strong></td>
+                            <td>${c.nombre}</td>
+                            <td>${c.apellido1}</td>
+                            <td>${c.apellido2}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += fila;
+                });
+            })
+            .catch(error => console.error("Error al cargar clientes:", error));
         }
 
-        $(document).ready(function () {
-            cargarClientes();
-        });
+        function mostrarMensaje(mensaje, tipo) {
+            const div = document.getElementById("mensajeCliente");
+            div.className = `alert alert-${tipo}`;
+            div.textContent = mensaje;
+            setTimeout(() => {
+                div.className = "";
+                div.textContent = "";
+            }, 4000);
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarClientes);
     </script>
 }

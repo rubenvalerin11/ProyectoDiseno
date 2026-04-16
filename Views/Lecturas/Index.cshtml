@@ -1,16 +1,159 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Lectura de Archivos";
 }
-<div class="container py-5">
-    <div class="card custom-card p-4">
-        <h2>Lectura de archivos</h2>
 
-        <button onclick="leerXML()">Leer XML</button>
-        <button onclick="leerJSON()">Leer JSON</button>
+<section class="py-5">
+    <div class="container">
+        <div class="card custom-card p-4">
+            <h2 class="section-title mb-4">📖 Lectura Dinámica de Archivos</h2>
 
-        <table id="tablaXML"></table>
-        <table id="tablaJSON"></table>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <button class="btn btn-primary btn-pill px-4" onclick="leerJSON()">📄 Leer JSON</button>
+                <button class="btn btn-info btn-pill px-4" onclick="leerXML()">📋 Leer XML</button>
+                <button class="btn btn-secondary btn-pill px-4" onclick="limpiarTablas()">Limpiar</button>
+            </div>
+
+            <hr>
+
+            <!-- TABLA JSON -->
+            <h3 class="mb-3">Datos desde JSON</h3>
+            <div class="table-responsive mb-5">
+                <table class="table table-hover align-middle table-modern" id="tablaJSON">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellido 1</th>
+                            <th>Apellido 2</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <!-- TABLA XML -->
+            <h3 class="mb-3">Datos desde XML</h3>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle table-modern" id="tablaXML">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellido 1</th>
+                            <th>Apellido 2</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+@section Scripts {
+    <script>
+        async function leerJSON() {
+            try {
+                const response = await fetch("/data/clientes.json");
+                if (!response.ok) {
+                    mostrarError("No se pudo cargar el archivo JSON");
+                    return;
+                }
+
+                const datos = await response.json();
+                const tbody = document.querySelector("#tablaJSON tbody");
+                tbody.innerHTML = "";
+
+                if (datos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No hay datos en el archivo JSON</td></tr>';
+                    return;
+                }
+
+                datos.forEach(cliente => {
+                    const fila = document.createElement("tr");
+                    fila.innerHTML = `
+                        <td><strong>${cliente.cedula || ""}</strong></td>
+                        <td>${cliente.nombre || ""}</td>
+                        <td>${cliente.apellido1 || ""}</td>
+                        <td>${cliente.apellido2 || ""}</td>
+                    `;
+                    tbody.appendChild(fila);
+                });
+
+                console.log("✅ JSON cargado correctamente:", datos);
+            } catch (error) {
+                console.error("❌ Error al leer JSON:", error);
+                mostrarError("Error al leer el archivo JSON: " + error.message);
+            }
+        }
+
+        async function leerXML() {
+            try {
+                const response = await fetch("/data/clientes.xml");
+                if (!response.ok) {
+                    mostrarError("No se pudo cargar el archivo XML");
+                    return;
+                }
+
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+                // Verificar si hay errores de parsing
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    mostrarError("El archivo XML está malformado");
+                    return;
+                }
+
+                const clientes = xmlDoc.getElementsByTagName("cliente");
+                const tbody = document.querySelector("#tablaXML tbody");
+                tbody.innerHTML = "";
+
+                if (clientes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No hay datos en el archivo XML</td></tr>';
+                    return;
+                }
+
+                for (let i = 0; i < clientes.length; i++) {
+                    const cliente = clientes[i];
+                    const cedula = cliente.querySelector("cedula")?.textContent || "";
+                    const nombre = cliente.querySelector("nombre")?.textContent || "";
+                    const apellido1 = cliente.querySelector("apellido1")?.textContent || "";
+                    const apellido2 = cliente.querySelector("apellido2")?.textContent || "";
+
+                    const fila = document.createElement("tr");
+                    fila.innerHTML = `
+                        <td><strong>${cedula}</strong></td>
+                        <td>${nombre}</td>
+                        <td>${apellido1}</td>
+                        <td>${apellido2}</td>
+                    `;
+                    tbody.appendChild(fila);
+                }
+
+                console.log("✅ XML cargado correctamente:", clientes.length, "clientes");
+            } catch (error) {
+                console.error("❌ Error al leer XML:", error);
+                mostrarError("Error al leer el archivo XML: " + error.message);
+            }
+        }
+
+        function limpiarTablas() {
+            document.querySelector("#tablaJSON tbody").innerHTML = "";
+            document.querySelector("#tablaXML tbody").innerHTML = "";
+            console.log("Tablas limpias");
+        }
+
+        function mostrarError(mensaje) {
+            const alertDiv = document.createElement("div");
+            alertDiv.className = "alert alert-danger alert-dismissible fade show";
+            alertDiv.innerHTML = `
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.querySelector(".card").insertBefore(alertDiv, document.querySelector(".card").firstChild);
+        }
+    </script>
+}

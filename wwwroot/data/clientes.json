@@ -1,6 +1,14 @@
-﻿namespace ProyectoDiseno.wwwroot.data
-{
-    public class clientes
-    {
-    }
-}
+﻿[
+  {
+    "cedula": "101010101",
+    "nombre": "Ruben",
+    "apellido1": "Valerin",
+    "apellido2": "Lopez"
+  },
+  {
+    "cedula": "202020202",
+    "nombre": "Jorge",
+    "apellido1": "Mora",
+    "apellido2": "Solis"
+  }
+]

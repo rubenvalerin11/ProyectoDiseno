@@ -5,14 +5,84 @@
 <section class="hero-section py-5">
     <div class="container">
         <div class="card custom-card p-5 text-center">
-            <span class="hero-badge">Proyecto Web en .NET</span>
-            <h1 class="display-4 fw-bold mt-3">Sistema</h1>
+            <span class="hero-badge">🎓 Proyecto Web en .NET 8</span>
+            <h1 class="display-4 fw-bold mt-3">Sistema de Gestión</h1>
             <p class="lead text-secondary hero-text mb-4">
-                Bienvenido al sistema del Grupo #4
+                Bienvenido al Sistema Integral de Clientes y Calculadora
+                <br>
+                <small>Grupo de Desarrollo Web - Universidad Internacional de las Américas</small>
             </p>
 
-            <div class="hero-image-wrapper">
-                <img src="~/img/pagina1proyecto.png" alt="Vista previa del sistema" class="img-fluid hero-preview" />
+            <hr class="my-5">
+
+            <h3 class="mb-4">✨ Funcionalidades Disponibles:</h3>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">👥 Gestión de Clientes</h5>
+                            <p class="card-text">Registra, visualiza y administra clientes con validación en tiempo real</p>
+                            <a href="@Url.Action("Index", "ClientesPage")" class="btn btn-primary btn-pill px-4">Ir a Clientes</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🧮 Calculadora Avanzada</h5>
+                            <p class="card-text">Realiza operaciones aritméticas con multiplicador x1.5 e historial</p>
+                            <a href="@Url.Action("Index", "Calculadora")" class="btn btn-primary btn-pill px-4">Ir a Calculadora</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">📤 Exportar Datos</h5>
+                            <p class="card-text">Descarga datos en formato JSON o XML, e importa desde archivos</p>
+                            <a href="@Url.Action("Index", "Archivos")" class="btn btn-success btn-pill px-4">Exportar/Importar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">📖 Leer Archivos</h5>
+                            <p class="card-text">Lee dinámicamente datos desde archivos JSON y XML</p>
+                            <a href="@Url.Action("Index", "Lecturas")" class="btn btn-info btn-pill px-4">Leer Datos</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">📊 Historial</h5>
+                            <p class="card-text">Visualiza el historial completo de operaciones realizadas</p>
+                            <a href="@Url.Action("Index", "Historial")" class="btn btn-warning btn-pill px-4">Ver Historial</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-5">
+
+            <div class="alert alert-light border-1">
+                <h5 class="mb-3">📋 Características del Proyecto:</h5>
+                <ul class="list-unstyled text-start">
+                    <li>✅ Crud de clientes con validación AJAX</li>
+                    <li>✅ Calculadora con operaciones aritméticas (suma, resta, multiplicación, división)</li>
+                    <li>✅ Multiplicador x1.5 en resultados</li>
+                    <li>✅ Validación de división entre cero</li>
+                    <li>✅ Código de colores para operaciones</li>
+                    <li>✅ Exportación e importación de datos (JSON/XML)</li>
+                    <li>✅ Lectura dinámica de archivos</li>
+                    <li>✅ Historial persistente con localStorage</li>
+                </ul>
             </div>
         </div>
     </div>

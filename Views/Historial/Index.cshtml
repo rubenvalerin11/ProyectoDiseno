@@ -1,12 +1,79 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Historial de Operaciones";
 }
-<div class="container py-5">
-    <div class="card custom-card p-4">
-        <h2>Historial</h2>
 
-        <ul id="listaHistorial"></ul>
+<section class="py-5">
+    <div class="container">
+        <div class="card custom-card p-4">
+            <h2 class="section-title mb-4">📊 Historial Completo de Operaciones</h2>
+
+            <div class="alert alert-info">
+                <strong>ℹ️ Información:</strong> El historial se almacena localmente en su navegador. Las operaciones de la calculadora se guardan automáticamente.
+            </div>
+
+            <div id="historialContent">
+                <ul id="listaHistorialGlobal" class="list-group historial-list"></ul>
+                <p id="mensajeVacio" class="text-center text-muted mt-4">No hay operaciones en el historial</p>
+            </div>
+
+            <button class="btn btn-outline-danger mt-4" onclick="limpiarHistorialGlobal()">🗑️ Limpiar Todo</button>
+        </div>
     </div>
-</div>
+</section>
+
+@section Scripts {
+    <script>
+        function cargarHistorialGlobal() {
+            const historialGuardado = localStorage.getItem("historialOperaciones");
+            let historial = [];
+
+            if (historialGuardado) {
+                historial = JSON.parse(historialGuardado);
+            }
+
+            const lista = document.getElementById("listaHistorialGlobal");
+            const mensajeVacio = document.getElementById("mensajeVacio");
+            lista.innerHTML = "";
+
+            if (historial.length === 0) {
+                mensajeVacio.style.display = "block";
+                return;
+            }
+
+            mensajeVacio.style.display = "none";
+
+            historial.forEach((op, index) => {
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.innerHTML = `
+                    <span><strong>#${index + 1}</strong> ${op}</span>
+                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarOperacion(${index})">✕</button>
+                `;
+                lista.appendChild(li);
+            });
+        }
+
+        function eliminarOperacion(index) {
+            const historialGuardado = localStorage.getItem("historialOperaciones");
+            if (!historialGuardado) return;
+
+            let historial = JSON.parse(historialGuardado);
+            historial.splice(index, 1);
+            localStorage.setItem("historialOperaciones", JSON.stringify(historial));
+            cargarHistorialGlobal();
+        }
+
+        function limpiarHistorialGlobal() {
+            if (confirm("¿Está seguro de que desea eliminar TODO el historial? Esta acción no se puede deshacer.")) {
+                localStorage.removeItem("historialOperaciones");
+                cargarHistorialGlobal();
+            }
+        }
+
+        // Cargar al iniciar
+        document.addEventListener("DOMContentLoaded", cargarHistorialGlobal);
+
+        // Recargar cada 2 segundos para reflejar cambios desde otras pestañas
+        setInterval(cargarHistorialGlobal, 2000);
+    </script>
+}

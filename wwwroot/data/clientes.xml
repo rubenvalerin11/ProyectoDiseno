@@ -1,6 +1,15 @@
-﻿namespace ProyectoDiseno.wwwroot.data
-{
-    public class clientes
-    {
-    }
-}
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCliente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Cliente>
+    <Cedula>101010101</Cedula>
+    <Nombre>Ruben</Nombre>
+    <Apellido1>Valerin</Apellido1>
+    <Apellido2>Lopez</Apellido2>
+  </Cliente>
+  <Cliente>
+    <Cedula>202020202</Cedula>
+    <Nombre>Jorge</Nombre>
+    <Apellido1>Mora</Apellido1>
+    <Apellido2>Solis</Apellido2>
+  </Cliente>
+</ArrayOfCliente>

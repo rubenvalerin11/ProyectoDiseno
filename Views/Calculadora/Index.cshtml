@@ -4,36 +4,115 @@
 
 <section class="py-5">
     <div class="container">
-        <div class="card custom-card p-4">
-            <h2 class="section-title mb-4 text-center">Calculadora</h2>
+        <div class="row g-4">
+            <!-- CALCULADORA -->
+            <div class="col-lg-6">
+                <div class="card custom-card p-4">
+                    <h2 class="section-title mb-4 text-center">🧮 Calculadora</h2>
 
-            <div class="calculator mx-auto">
-                <input type="text" id="display" class="form-control form-control-lg text-end mb-3 calc-display" readonly />
+                    <div class="calculator">
+                        <input type="text" id="display" class="form-control form-control-lg text-end mb-3 calc-display" readonly />
 
-                <div class="row g-2">
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('7')">7</button></div>
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('8')">8</button></div>
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('9')">9</button></div>
-                    <div class="col-3"><button class="btn btn-operador suma w-100" onclick="agregarValor('+')">+</button></div>
+                        <div class="row g-2">
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('7')">7</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('8')">8</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('9')">9</button></div>
+                            <div class="col-3"><button class="btn btn-operador suma w-100" onclick="agregarValor('+')">+</button></div>
 
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('4')">4</button></div>
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('5')">5</button></div>
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('6')">6</button></div>
-                    <div class="col-3"><button class="btn btn-operador resta w-100" onclick="agregarValor('-')">-</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('4')">4</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('5')">5</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('6')">6</button></div>
+                            <div class="col-3"><button class="btn btn-operador resta w-100" onclick="agregarValor('-')">-</button></div>
 
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('1')">1</button></div>
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('2')">2</button></div>
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('3')">3</button></div>
-                    <div class="col-3"><button class="btn btn-operador multi w-100" onclick="agregarValor('*')">*</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('1')">1</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('2')">2</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('3')">3</button></div>
+                            <div class="col-3"><button class="btn btn-operador multi w-100" onclick="agregarValor('*')">×</button></div>
 
-                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('0')">0</button></div>
-                    <div class="col-3"><button class="btn btn-clear w-100" onclick="limpiarDisplay()">C</button></div>
-                    <div class="col-3"><button class="btn btn-equal w-100" onclick="calcularResultado()">=</button></div>
-                    <div class="col-3"><button class="btn btn-operador division w-100" onclick="agregarValor('/')">/</button></div>
+                            <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('0')">0</button></div>
+                            <div class="col-3"><button class="btn btn-clear w-100" onclick="limpiarDisplay()">C</button></div>
+                            <div class="col-3"><button class="btn btn-equal w-100" onclick="calcularResultado()">=</button></div>
+                            <div class="col-3"><button class="btn btn-operador division w-100" onclick="agregarValor('/')">÷</button></div>
+                        </div>
+
+                        <div id="resultadoColor" class="resultado-box mt-3"></div>
+                    </div>
                 </div>
+            </div>
 
-                <div id="resultadoColor" class="resultado-box mt-3"></div>
+            <!-- HISTORIAL -->
+            <div class="col-lg-6">
+                <div class="card custom-card p-4">
+                    <h2 class="section-title mb-4">📜 Historial de Operaciones</h2>
+
+                    <div id="historialContainer" style="max-height: 400px; overflow-y: auto;">
+                        <ul id="listaHistorial" class="list-group historial-list"></ul>
+                    </div>
+
+                    <button class="btn btn-outline-danger btn-sm mt-3" onclick="limpiarHistorial()">Limpiar Historial</button>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script>
+        // Cargar historial del localStorage al iniciar
+        function cargarHistorialLocal() {
+            const historialGuardado = localStorage.getItem("historialOperaciones");
+            if (historialGuardado) {
+                historialOperaciones = JSON.parse(historialGuardado);
+                actualizarVistaHistorial();
+            }
+        }
+
+        // Guardar historial en localStorage
+        function guardarHistorialLocal() {
+            localStorage.setItem("historialOperaciones", JSON.stringify(historialOperaciones));
+        }
+
+        // Actualizar la vista del historial
+        function actualizarVistaHistorial() {
+            const lista = document.getElementById("listaHistorial");
+            lista.innerHTML = "";
+            historialOperaciones.forEach((op, index) => {
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.innerHTML = `
+                    <span>${op}</span>
+                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarDelHistorial(${index})">✕</button>
+                `;
+                lista.appendChild(li);
+            });
+        }
+
+        // Eliminar operación del historial
+        function eliminarDelHistorial(index) {
+            historialOperaciones.splice(index, 1);
+            guardarHistorialLocal();
+            actualizarVistaHistorial();
+        }
+
+        // Limpiar todo el historial
+        function limpiarHistorial() {
+            if (confirm("¿Está seguro de que desea limpiar todo el historial?")) {
+                historialOperaciones = [];
+                guardarHistorialLocal();
+                actualizarVistaHistorial();
+            }
+        }
+
+        // Reemplazar la función calcularResultado original
+        const calcularResultadoOriginal = window.calcularResultado;
+        window.calcularResultado = function() {
+            calcularResultadoOriginal();
+            guardarHistorialLocal();
+            actualizarVistaHistorial();
+        };
+
+        // Cargar historial al iniciar la página
+        document.addEventListener("DOMContentLoaded", cargarHistorialLocal);
+    </script>
+}

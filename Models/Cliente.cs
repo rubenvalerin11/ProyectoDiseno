@@ -2,9 +2,9 @@
 {
     public class Cliente
     {
-        public string Cedula { get; set; } = string.Empty;
-        public string Nombre { get; set; } = string.Empty;
-        public string Apellido1 { get; set; } = string.Empty;
-        public string Apellido2 { get; set; } = string.Empty;
+        public string Cedula { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido1 { get; set; }
+        public string Apellido2 { get; set; }
     }
 }
