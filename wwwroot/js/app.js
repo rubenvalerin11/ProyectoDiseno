@@ -62,15 +62,15 @@ function calcularResultado() {
 
         switch (operador) {
             case "+":
-                resultado = (n1 + n2) * 1.5;
+                resultado = n1 + n2;
                 claseColor = "resultado-suma";
                 break;
             case "-":
-                resultado = (n1 - n2) * 1.5;
+                resultado = n1 - n2;
                 claseColor = "resultado-resta";
                 break;
             case "*":
-                resultado = (n1 * n2) * 1.5;
+                resultado = n1 * n2;
                 claseColor = "resultado-multi";
                 break;
             case "/":
@@ -81,10 +81,20 @@ function calcularResultado() {
 
         // Mostrar resultado con color
         resultadoDiv.className = `resultado-box mt-3 ${claseColor}`;
-        resultadoDiv.textContent = `Resultado (×1.5): ${resultado.toFixed(2)}`;
+
+        if (operador === "/") {
+            resultadoDiv.textContent = `Resultado (÷ ×1.5): ${resultado.toFixed(2)}`;
+        } else {
+            resultadoDiv.textContent = `Resultado: ${resultado.toFixed(2)}`;
+        }
 
         // Guardar en historial
-        const operacionTexto = `${n1} ${operador} ${n2} = ${resultado.toFixed(2)}`;
+        let operacionTexto = "";
+        if (operador === "/") {
+            operacionTexto = `${n1} ÷ ${n2} = ${resultado.toFixed(2)} (×1.5)`;
+        } else {
+            operacionTexto = `${n1} ${operador} ${n2} = ${resultado.toFixed(2)}`;
+        }
         historialOperaciones.push(operacionTexto);
 
         // Guardar en localStorage para persistencia

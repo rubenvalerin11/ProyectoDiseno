@@ -1,14 +1,14 @@
-﻿[
+[
   {
-    "cedula": "101010101",
-    "nombre": "Ruben",
-    "apellido1": "Valerin",
-    "apellido2": "Lopez"
+    "Cedula": "101010101",
+    "Nombre": "Ruben",
+    "Apellido1": "Valerin",
+    "Apellido2": "Lopez"
   },
   {
-    "cedula": "202020202",
-    "nombre": "Jorge",
-    "apellido1": "Mora",
-    "apellido2": "Solis"
+    "Cedula": "202020202",
+    "Nombre": "Jorge",
+    "Apellido1": "Mora",
+    "Apellido2": "Solis"
   }
 ]
