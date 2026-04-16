@@ -1,0 +1,117 @@
+﻿@{
+    ViewData["Title"] = "Clientes";
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="card custom-card p-4">
+            <h2 class="section-title mb-4">Registrar Cliente</h2>
+
+            <div class="row g-3"> 
+                <div class="col-md-3">
+                    <input type="text" id="txtCedula" class="form-control form-control-lg" placeholder="Cédula" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="txtNombre" class="form-control form-control-lg" placeholder="Nombre" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="txtApellido1" class="form-control form-control-lg" placeholder="Apellido 1" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="txtApellido2" class="form-control form-control-lg" placeholder="Apellido 2" />
+                </div>
+            </div>
+
+            <div class="mt-4">
+            <button class="btn btn-dark btn-pill px-4" onclick="guardarCliente()">
+                Guardar cliente
+            </button>
+
+            <div id="mensajeCliente" class="mt-3 fw-semibold"></div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-soft">
+    <div class="container">
+        <div class="card custom-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h2 class="section-title mb-0">Clientes registrados</h2>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle table-modern" id="tablaClientes">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellido 1</th>
+                            <th>Apellido 2</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function guardarCliente() {
+            const cliente = {
+                cedula: $("#txtCedula").val(),
+                nombre: $("#txtNombre").val(),
+                apellido1: $("#txtApellido1").val(),
+                apellido2: $("#txtApellido2").val()
+            };
+
+            $.ajax({
+                url: "/Clientes/Agregar",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(cliente),
+                success: function (response) {
+                    alert(response.mensaje);
+                    cargarClientes(); 
+                },
+                error: function (err) {
+                    alert(err.responseJSON?.mensaje || "Error al guardar");
+                }
+            });
+        }
+
+        function cargarClientes() {
+            $.ajax({
+                url: "/Clientes/ObtenerTodos",
+                type: "GET",
+                success: function (data) {
+
+                    let filas = "";
+
+                    data.forEach(c => {
+                        filas += `
+                            <tr>
+                                <td>${c.cedula}</td>
+                                <td>${c.nombre}</td>
+                                <td>${c.apellido1}</td>
+                                <td>${c.apellido2}</td>
+                            </tr>
+                        `;
+                    });
+
+                    $("#tablaClientes tbody").html(filas);
+                },
+                error: function () {
+                    alert("Error al cargar clientes");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            cargarClientes();
+        });
+    </script>
+}

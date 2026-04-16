@@ -1,0 +1,120 @@
+﻿@{
+}
+
+<div class="container py-5">
+    <div class="card custom-card p-4">
+        <h2>Registro de Clientes</h2>
+
+        <div class="row g-3">
+            <div class="col-md-3">
+                <input type="text" id="txtCedula" class="form-control" placeholder="Cédula" />
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="txtNombre" class="form-control" placeholder="Nombre" />
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="txtApellido1" class="form-control" placeholder="Apellido 1" />
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="txtApellido2" class="form-control" placeholder="Apellido 2" />
+            </div>
+        </div>
+
+        <button class="btn btn-dark mt-3" onclick="agregarCliente()">Guardar</button>
+
+        <hr>
+
+        <!-- 🔽 BOTONES DE EXPORTACIÓN -->
+        <h4>Exportar</h4>
+        <a href="/Clientes/ExportarJson" class="btn btn-success">Exportar JSON</a>
+        <a href="/Clientes/ExportarXml" class="btn btn-primary">Exportar XML</a>
+
+        <hr>
+
+        <!-- 🔽 IMPORTAR ARCHIVOS -->
+        <h4>Importar</h4>
+
+        <form action="/Clientes/ImportarJson" method="post" enctype="multipart/form-data">
+            <input type="file" name="archivo" required />
+            <button class="btn btn-warning">Importar JSON</button>
+        </form>
+
+        <br>
+
+        <form action="/Clientes/ImportarXml" method="post" enctype="multipart/form-data">
+            <input type="file" name="archivo" required />
+            <button class="btn btn-info">Importar XML</button>
+        </form>
+
+        <hr>
+
+        <!-- 🔽 TABLA -->
+        <table class="table" id="tablaClientes">
+            <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Apellido1</th>
+                    <th>Apellido2</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 🔹 Cargar clientes
+    function cargarClientes() {
+        fetch('/Clientes/ObtenerTodos')
+            .then(res => res.json())
+            .then(data => {
+                let tabla = document.querySelector("#tablaClientes tbody");
+                tabla.innerHTML = "";
+
+                data.forEach(c => {
+                    tabla.innerHTML += `
+                    <tr>
+                        <td>${c.cedula}</td>
+                        <td>${c.nombre}</td>
+                        <td>${c.apellido1}</td>
+                        <td>${c.apellido2}</td>
+                    </tr>
+                `;
+                });
+            });
+    }
+
+    //  Agregar cliente
+    function agregarCliente() {
+        const cliente = {
+            cedula: document.getElementById("txtCedula").value,
+            nombre: document.getElementById("txtNombre").value,
+            apellido1: document.getElementById("txtApellido1").value,
+            apellido2: document.getElementById("txtApellido2").value
+        };
+
+        fetch('/Clientes/Agregar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cliente)
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.mensaje);
+                limpiarCampos();
+                cargarClientes();
+            });
+    }
+
+    //  Limpiar inputs
+    function limpiarCampos() {
+        document.getElementById("txtCedula").value = "";
+        document.getElementById("txtNombre").value = "";
+        document.getElementById("txtApellido1").value = "";
+        document.getElementById("txtApellido2").value = "";
+    }
+
+    // 🔹 Ejecutar al cargar la página
+    window.onload = cargarClientes;
+</script>

@@ -1,0 +1,6 @@
+﻿namespace ProyectoDiseno.wwwroot.data
+{
+    public class clientes
+    {
+    }
+}

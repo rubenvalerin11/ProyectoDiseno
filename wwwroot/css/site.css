@@ -1,0 +1,342 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #f5f5f7;
+    color: #1d1d1f;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* NAVBAR */
+.apple-navbar {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.35s ease;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+    .apple-navbar.navbar-scrolled {
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        padding-top: 0.45rem;
+        padding-bottom: 0.45rem;
+    }
+
+.apple-brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #111 !important;
+    text-decoration: none;
+    letter-spacing: -0.3px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+    .apple-brand:hover {
+        transform: translateY(-1px);
+        opacity: 0.85;
+    }
+
+.apple-link {
+    position: relative;
+    color: #1d1d1f !important;
+    font-weight: 500;
+    padding: 0.65rem 0.95rem !important;
+    border-radius: 999px;
+    transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+}
+
+    .apple-link:hover {
+        color: #0d6efd !important;
+        background-color: rgba(13, 110, 253, 0.06);
+        transform: translateY(-1px);
+    }
+
+    .apple-link::after {
+        content: "";
+        position: absolute;
+        left: 18%;
+        bottom: 8px;
+        width: 64%;
+        height: 2px;
+        background: #0d6efd;
+        border-radius: 999px;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.28s ease;
+    }
+
+    .apple-link:hover::after,
+    .apple-link.active::after {
+        transform: scaleX(1);
+    }
+
+    .apple-link.active {
+        color: #0d6efd !important;
+        background-color: rgba(13, 110, 253, 0.06);
+    }
+
+/* ENTRADA DE PÁGINA */
+.page-enter {
+    animation: pageFadeUp 0.65s ease both;
+}
+
+@keyframes pageFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HERO / CONTENEDORES */
+.hero-section {
+    padding: 110px 20px 90px;
+    background: linear-gradient(to bottom, #ffffff, #f5f5f7);
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background-color: #e9f2ff;
+    color: #0d6efd;
+    font-weight: 600;
+    font-size: 0.95rem;
+    animation: badgeFloat 1s ease both;
+}
+
+@keyframes badgeFloat {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-text {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.bg-soft {
+    background-color: #eef1f5;
+}
+
+.custom-card {
+    border: none;
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    background-color: #ffffff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .custom-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+    }
+
+.section-title {
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+/* FORM */
+.form-control {
+    border-radius: 18px;
+    border: 1px solid #dcdcdc;
+    min-height: 52px;
+    box-shadow: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.12);
+        transform: translateY(-1px);
+    }
+
+.btn-pill {
+    border-radius: 999px;
+    min-height: 46px;
+    font-weight: 600;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+    .btn-pill:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+/* TABLES */
+.table-modern {
+    margin-bottom: 0;
+}
+
+    .table-modern thead th {
+        background-color: #f8f9fb;
+        border-bottom: 1px solid #dddddd;
+        font-weight: 700;
+    }
+
+    .table-modern tbody tr {
+        transition: background-color 0.25s ease, transform 0.2s ease;
+    }
+
+        .table-modern tbody tr:hover {
+            background-color: #f9fbff;
+        }
+
+/* CALCULADORA */
+.calculator {
+    max-width: 430px;
+}
+
+.calc-display {
+    border-radius: 18px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background-color: #fafafa;
+}
+
+.btn-calc,
+.btn-clear,
+.btn-equal,
+.btn-operador {
+    min-height: 58px;
+    border-radius: 18px;
+    font-weight: 700;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+    .btn-calc:hover,
+    .btn-clear:hover,
+    .btn-equal:hover,
+    .btn-operador:hover {
+        transform: translateY(-1px) scale(1.01);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+.btn-calc {
+    background-color: #f2f2f2;
+    color: #1d1d1f;
+}
+
+    .btn-calc:hover {
+        background-color: #e7e7e7;
+    }
+
+.btn-clear {
+    background-color: #ffedd5;
+    color: #9a3412;
+}
+
+    .btn-clear:hover {
+        background-color: #fed7aa;
+    }
+
+.btn-equal {
+    background-color: #111827;
+    color: white;
+}
+
+    .btn-equal:hover {
+        background-color: #1f2937;
+    }
+
+.btn-operador {
+    color: white;
+}
+
+.suma {
+    background-color: #0d6efd;
+}
+
+.resta {
+    background-color: #dc3545;
+}
+
+.multi {
+    background-color: #198754;
+}
+
+.division {
+    background-color: #6f42c1;
+}
+
+.resultado-box {
+    min-height: 56px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    animation: resultFade 0.35s ease;
+}
+
+@keyframes resultFade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.resultado-suma {
+    color: #0d6efd;
+}
+
+.resultado-resta {
+    color: #dc3545;
+}
+
+.resultado-multi {
+    color: #198754;
+}
+
+.resultado-division {
+    color: #6f42c1;
+}
+
+.historial-list .list-group-item {
+    border-radius: 14px;
+    margin-bottom: 8px;
+    border: 1px solid #ececec;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+    .historial-list .list-group-item:hover {
+        transform: translateX(2px);
+        background-color: #fafcff;
+    }
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+    .apple-link {
+        margin-top: 6px;
+    }
+
+    .hero-section {
+        padding: 90px 18px 70px;
+    }
+}

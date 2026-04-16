@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Calculadora";
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="card custom-card p-4">
+            <h2 class="section-title mb-4 text-center">Calculadora</h2>
+
+            <div class="calculator mx-auto">
+                <input type="text" id="display" class="form-control form-control-lg text-end mb-3 calc-display" readonly />
+
+                <div class="row g-2">
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('7')">7</button></div>
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('8')">8</button></div>
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('9')">9</button></div>
+                    <div class="col-3"><button class="btn btn-operador suma w-100" onclick="agregarValor('+')">+</button></div>
+
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('4')">4</button></div>
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('5')">5</button></div>
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('6')">6</button></div>
+                    <div class="col-3"><button class="btn btn-operador resta w-100" onclick="agregarValor('-')">-</button></div>
+
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('1')">1</button></div>
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('2')">2</button></div>
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('3')">3</button></div>
+                    <div class="col-3"><button class="btn btn-operador multi w-100" onclick="agregarValor('*')">*</button></div>
+
+                    <div class="col-3"><button class="btn btn-calc w-100" onclick="agregarValor('0')">0</button></div>
+                    <div class="col-3"><button class="btn btn-clear w-100" onclick="limpiarDisplay()">C</button></div>
+                    <div class="col-3"><button class="btn btn-equal w-100" onclick="calcularResultado()">=</button></div>
+                    <div class="col-3"><button class="btn btn-operador division w-100" onclick="agregarValor('/')">/</button></div>
+                </div>
+
+                <div id="resultadoColor" class="resultado-box mt-3"></div>
+            </div>
+        </div>
+    </div>
+</section>
